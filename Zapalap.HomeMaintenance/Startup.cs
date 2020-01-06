@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +33,8 @@ namespace Zapalap.HomeMaintenance
             services.AddSpaStaticFiles(options => options.RootPath = "client-app/dist");
 
             services.AddDbContext<AppDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("AppDbConnection")));
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
