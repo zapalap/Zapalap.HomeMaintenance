@@ -38,7 +38,7 @@ namespace Zapalap.HomeMaintenance.Infrastructure.Spa
                 var processInfo = new ProcessStartInfo
                 {
                     FileName = isWindows ? "cmd" : "npm",
-                    Arguments = $"{(isWindows ? "/c npm " : "")}run serve",
+                    Arguments = $"{(isWindows ? "/c quasar " : "")}dev",
                     WorkingDirectory = "client-app",
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
