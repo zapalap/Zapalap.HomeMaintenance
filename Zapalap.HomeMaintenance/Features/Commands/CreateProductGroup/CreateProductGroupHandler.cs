@@ -20,7 +20,7 @@ namespace Zapalap.HomeMaintenance.Features.Commands.CreateProductGroup
             Db = db;
         }
 
-        public Task<RequestResult<ProductGroupDto>> Handle(CreateProductGroup request, CancellationToken cancellationToken)
+        public async Task<RequestResult<ProductGroupDto>> Handle(CreateProductGroup request, CancellationToken cancellationToken)
         {
             var newProductGroup = new ProductGroup
             {
@@ -29,6 +29,7 @@ namespace Zapalap.HomeMaintenance.Features.Commands.CreateProductGroup
             };
 
             Db.Add(newProductGroup);
+            await Db.SaveChangesAsync();
 
             var dto = new ProductGroupDto
             {
@@ -37,7 +38,7 @@ namespace Zapalap.HomeMaintenance.Features.Commands.CreateProductGroup
                 Description = newProductGroup.Description
             };
 
-            return Task.FromResult(RequestResult<ProductGroupDto>.Success(dto));
+            return RequestResult<ProductGroupDto>.Success(dto);
         }
     }
 }
