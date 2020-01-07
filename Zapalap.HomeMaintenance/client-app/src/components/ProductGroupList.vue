@@ -1,19 +1,30 @@
 <template>
   <div class="q-pa-md q-gutter-md row items-start">
-    <q-card
+    <div
       v-for="group in this.productGroups"
       :key="group.id"
-      class="bg-secondary text-white"
     >
-      <q-card-section class="text-h6">{{group.name}}</q-card-section>
-      <q-card-section>{{group.description}}</q-card-section>
-    </q-card>
-    <q-btn
-      round
-      color="primary"
-      label="+"
-      @click="dialogIsShown = true"
-    />
+      <q-card class="bg-secondary text-white">
+        <q-card-section class="text-h6">{{group.name}}</q-card-section>
+        <q-card-section>{{group.description}}</q-card-section>
+        <q-card-actions>
+          <q-btn
+            flat
+            @click="deleteGroup(group.id)"
+            label="delete"
+          />
+        </q-card-actions>
+      </q-card>
+    </div>
+    <div>
+      <q-btn
+        round
+        color="secondary"
+        label="+"
+        class="self-center"
+        @click="dialogIsShown = true"
+      />
+    </div>
 
     <q-dialog v-model="dialogIsShown">
       <q-card>
@@ -71,22 +82,28 @@ export default {
     }
   },
   methods: {
+    fetchGroups () {
+      this.$axios
+        .get('api/productGroups')
+        .then(response => (this.productGroups = response.data))
+    },
     createGroup () {
       this.$axios
         .post('api/productGroups', { 'name': this.groupToCreate.name, 'description': this.groupToCreate.description })
         .then(_ => {
           this.groupToCreate.name = null
           this.groupToCreate.description = null
-          this.$axios
-            .get('api/productGroups')
-            .then(response => (this.productGroups = response.data))
+          this.fetchGroups()
         })
+    },
+    deleteGroup (groupId) {
+      this.$axios
+        .delete(`api/productGroups/${groupId}`)
+        .then(_ => this.fetchGroups())
     }
   },
   mounted () {
-    this.$axios
-      .get('api/productGroups')
-      .then(response => (this.productGroups = response.data))
+    this.fetchGroups()
   }
 }
 </script>

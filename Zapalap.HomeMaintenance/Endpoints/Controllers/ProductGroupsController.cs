@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Zapalap.HomeMaintenance.Features.Commands.CreateProductGroup;
+using Zapalap.HomeMaintenance.Features.Commands.DeleteProductGroup;
 using Zapalap.HomeMaintenance.Features.Dto;
 using Zapalap.HomeMaintenance.Features.Queries.GetProductGroups;
 
@@ -45,6 +46,18 @@ namespace Zapalap.HomeMaintenance.Endpoints.Controllers
                 return result.Value;
 
             return BadRequest(result);
+        }
+
+        [HttpDelete]
+        [Route("{productGroupId}")]
+        public async Task<ActionResult<ProductGroupDto>> DeleteProductGroup([FromRoute]int productGroupId)
+        {
+            var result = await Mediator.Send(new DeleteProductGroup { ProductGroupId = productGroupId});
+
+            if (result.IsSuccess)
+                return result.Value;
+
+            return NotFound(result);
         }
     }
 }
